@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ValidatorsService } from 'src/app/shared/services/validators.service';
 
 const product = {
   name      : 'RTX 4090',
@@ -20,14 +21,17 @@ export class BasicPageComponent implements OnInit{
     price     : [0, [Validators.required, Validators.min(0)] ],
     inStorage : [0, [Validators.required, Validators.min(0)] ],
   })
-  constructor( private fb : FormBuilder ){}
+  constructor( 
+    private fb : FormBuilder,
+    private validatorService : ValidatorsService
+  ){}
 
   ngOnInit(): void {
     // this.myForms.reset( product )
   }
 
   isValidField( field : string ) : boolean | null{
-    return this.myForms.controls[field].errors && this.myForms.controls[field].touched
+    return this.validatorService.isValidField(field, this.myForms)
   }
 
   getFieldError(field : string ) : string | null {
